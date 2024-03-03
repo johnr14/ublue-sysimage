@@ -1,7 +1,7 @@
 # image will be published to ghcr.io/<user>/<name>
-name: ublue-sysimage
+name: ublue-hyprland
 # description will be included in the image's metadata
-description: These are my personal OS images.
+description: ""
 
 # the base image to build on top of (FROM) and the version tag to use
 base-image: ghcr.io/ublue-os/base-main
@@ -13,105 +13,110 @@ modules:
   - type: files
     files:
       - usr: /usr
-          # copies config/files/usr into your image's /usr.
-          # put configuration files you want in /etc/ on a booted system 
-          # in /usr/etc/ in the image. read more in files module reference.
+          # copy static configurations
+          #
+          # copies config/files/usr into your image's /usr
+          #
+          # configuration you wish to end up in /etc/ on the booted system
+          # should be added into /usr/etc/ as that is the proper "distro"
+          # config directory on ostree. Read more in the files module's README
 
   - type: rpm-ostree
-    repos: # - https://copr.fedorainfracloud.org/coprs/atim/starship/repo/fedora-%OS_VERSION%/atim-starship-fedora-%OS_VERSION%.repo
-      - https://copr.fedorainfracloud.org/coprs/tofik/nwg-shell/repo/fedora-39/tofik-nwg-shell-fedora-39.repo
-        #     - https://copr.fedorainfracloud.org/coprs/eddsalkield/swaylock-effects/repo/fedora-39/eddsalkield-swaylock-effects-fedora-39.repo
+    remove:
+      - xorg-x11-server-Xwayland
+
+  - type: rpm-ostree
+    repos:
       - https://copr.fedorainfracloud.org/coprs/solopasha/hyprland/repo/fedora-39/solopasha-hyprland-fedora-39.repo
     install:
-      - curl
-      - git
-      - hyprland-git
-      - hyprland-contrib
-      - hyprland-plugins-git
-      - hyprpaper
-      - hyprpicker
-       # - hyrpidle # FIXME
-      - hyprshot
-      - nwg-clipman
-      - cliphist
-      - aylurs-gtk-shell
-      - swww
-      - waypaper
-      - hyprnome
-      - hyprdim
-      - swaylock-effects
-      - waybar-git
-      - xdg-desktop-portal-hyprland
-      - grim
-      - gvfs
-      - gvfs-mtp
-      - ImageMagick
-      - jq
-      - kitty
-      - kvantum
-      - nano
-      - network-manager-applet
-      - openssl
-      - pamixer
+      # hyprland
+      - hyprland
+      - hyprpaper # wallpaper util
+      - hyprpicker # color picker
+      - hyprshot # screenshot util
+      - xdg-desktop-portal-hyprland # desktop portal
+
+      # audio
       - pavucontrol
-      - pipewire-alsa
+      - pipewire
       - playerctl
-      - polkit-gnome
-      - python3-requests
+      - wireplumber
+
+      # bluetooth
+      - blueman
+
+      # terminal
+      - alacritty # terminal
       - foot
-      - thunar
-      - nautilus
-      - kate
-      - nwg-shell
-      - python3-pip
-      - qt5ct
-      - qt6ct
-      - qt6-qtsvg
-      - rofi-wayland
-      - slurp
-      - swappy
-      - swayidle
-      - SwayNotificationCenter
-      - waybar
-      - wget
-      - wl-clipboard  	
-      - wlogout
-      - xdg-user-dirs
-      - xdg-utils  	
-      - yad
+      - micro # tui editor better than nano
+      - fish # shell
+      
+      # modern cli tools https://github.com/ibraheemdev/modern-unix
+      - duf
+      - eza
+      - fd-find
+      - httpie
+      - procs
+      - tldr
+
+      # network
+      - network-manager-applet
+      - NetworkManager-l2tp-gnome
+      - NetworkManager-libreswan-gnome
+      - NetworkManager-openconnect-gnome
+      - NetworkManager-openvpn-gnome
+      - NetworkManager-pptp-gnome
+      - NetworkManager-sstp-gnome
+      - NetworkManager-vpnc-gnome
+
+      # qt
+      - qt5-qtwayland
+      - qt6-qtwayland
+
+      # other
+      - bolt
       - brightnessctl
-      - btop
-      - cava
-      - eog
-      - gnome-system-monitor
-      - mousepad
-      - mpv  	
-      - mpv-mpris
-      - neovim
-        #      - cliphist
-      - pamixer
-      - swaylock
-      - swaylock-effects
-        #- swww
+      - dunst # notification daemon
+      - fprintd-pam
+      - gnome-keyring-pam
+      - lxqt-policykit
+      - nautilus
+      - pinentry-gnome3
+      - plymouth-system-theme
+      - rofi-wayland
+      - sddm-wayland-generic # display manager
+      - system-config-printer
+      - waybar
+      - wl-clipboard
     remove:
       - firefox # default firefox removed in favor of flatpak
       - firefox-langpacks # langpacks needs to also be removed to prevent dependency problems
 
-  - type: default-flatpaks
-    notify: true # Send notification after install/uninstall is finished (true/false)
-    system:
-      # If no repo information is specified, Flathub will be used by default
-      # repo-url: https://dl.flathub.org/repo/flathub.flatpakrepo
-      # repo-name: flathub
-      # repo-title: "Flathub (system-wide)" # Optional; this sets the remote's user-facing name in graphical frontends like GNOME Software
-      install:
-        - org.mozilla.firefox
-        # - org.gnome.Loupe
-        # - one.ablaze.floorp//lightning # This is an example of flatpak which has multiple branches in selection (flatpak//branch).
-        # Flatpak runtimes are not supported (like org.winehq.Wine//stable-23.08),
-        # only normal flatpak applications are (like Floorp Lightning web browser in this example).
-        # Installing different branches of the same Flatpak is not supported.
-      remove:
-        # - org.gnome.eog
+  - type: bling # configure what to pull in from ublue-os/bling
+    install:
+      - justfiles # add "!include /usr/share/ublue-os/just/100-bling.just"
+                  # in your custom.just (added by default) or local justfile
+      - nix-installer # shell shortcuts for determinate system's nix installers
+      - ublue-os-wallpapers
+      # - ublue-update # https://github.com/ublue-os/ublue-update
+      # - 1password # install 1Password (stable) and `op` CLI tool
+      # - dconf-update-service # a service unit that updates the dconf db on boot
+      # - devpod # https://devpod.sh/ as an rpm
+      # - gnome-vrr # enables gnome-vrr for your image
+      # - container-tools # installs container-related tools onto /usr/bin: kind, kubectx, docker-compose and kubens
+      # - laptop # installs TLP and configures your system for laptop usage
+      # - flatpaksync # allows synchronization of user-installed flatpaks, see separate documentation section
 
-  - type: signing # this sets up the proper policy & signing files for signed images to work fully
+
+  - type: yafti
+      # if included, yafti and it's dependencies (pip & libadwaita)
+      #  will be installed and set up
+    custom-flatpaks:
+      # this section is optional
+      # - Celluloid: io.github.celluloid_player.Celluloid
+      # - Krita: org.kde.krita
+
+  - type: script
+    scripts:
+      # this sets up the proper policy & signing files for signed images to work
+      #- signing.sh
