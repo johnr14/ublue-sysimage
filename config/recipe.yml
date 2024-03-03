@@ -30,7 +30,7 @@ modules:
       - hyprland-plugins-git
       - hyprpaper
       - hyprpicker
-      - hyrpidle
+       # - hyrpidle # FIXME
       - hyprshot
       - nwg-clipman
       - cliphist
