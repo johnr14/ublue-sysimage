@@ -19,9 +19,63 @@ modules:
 
   - type: rpm-ostree
     repos: # - https://copr.fedorainfracloud.org/coprs/atim/starship/repo/fedora-%OS_VERSION%/atim-starship-fedora-%OS_VERSION%.repo
+      - https://copr.fedorainfracloud.org/coprs/tofik/nwg-shell/repo/fedora-39/tofik-nwg-shell-fedora-39.repo
     install:
       # - micro
       # - starship
+	- curl
+  	- git
+        - hyprland
+  	- grim
+  	- gvfs
+  	- gvfs-mtp
+  	- ImageMagick
+  	- jq
+  	- kitty
+  	- kvantum
+  	- nano
+  	- network-manager-applet
+  	- openssl
+  	- pamixer
+  	- pavucontrol
+  	- pipewire-alsa
+  	- playerctl
+  	- polkit-gnome
+  	- python3-requests
+        - foot
+        - thunar
+        - nautilus
+        - kate
+        - nwg-shell
+  	- python3-pip
+  	- qt5ct
+  	- qt6ct
+  	- qt6-qtsvg
+  	- rofi-wayland
+  	- slurp
+  	- swappy
+  	- swayidle
+  	- SwayNotificationCenter
+  	- waybar
+  	- wget
+  	- wl-clipboard
+  	- wlogout
+  	- xdg-user-dirs
+  	- xdg-utils
+  	- yad
+	- brightnessctl
+	- btop
+	- cava
+  	- eog
+  	- gnome-system-monitor
+  	- mousepad
+  	- mpv
+  	- mpv-mpris
+  	- nvim
+	- cliphist
+	- pamixer
+	- swaylock-effects
+	- swww
     remove:
       - firefox # default firefox removed in favor of flatpak
       - firefox-langpacks # langpacks needs to also be removed to prevent dependency problems
