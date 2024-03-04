@@ -28,6 +28,7 @@ modules:
   - type: rpm-ostree
     repos:
       - https://copr.fedorainfracloud.org/coprs/solopasha/hyprland/repo/fedora-39/solopasha-hyprland-fedora-39.repo
+      - https://copr.fedorainfracloud.org/coprs/tofik/nwg-shell/repo/fedora-39/tofik-nwg-shell-fedora-39.repo
     install:
       # hyprland
       - hyprland
@@ -35,6 +36,19 @@ modules:
       - hyprpicker # color picker
       - hyprshot # screenshot util
       - xdg-desktop-portal-hyprland # desktop portal
+
+      # nwg-shell
+      - nwg-shell
+      - nwg-bar
+      - nwg-displays
+      - nwg-dock
+      - nwg-drawer
+      - nwg-icon-picker
+      - nwg-look
+      - nwg-menu
+      - nwg-panel
+      - nwg-shell-config
+      - nwg-shell-wallpapers
 
       # audio
       - pavucontrol
